@@ -128,8 +128,9 @@ def run():
                 update_state.set_available(release)
                 if release and update_settings.notified != release.version:
                     update_settings.set_notified(release.version)
-                    icon.notify('Доступна версія ' + release.version
-                                + '. Натисніть на іконку → «Оновити».', 'Haste2 Battery')
+                    icon.notify('Доступна версія ' + release.version + '. Відкрийте меню іконки і '
+                                'натисніть «Оновити до версії ' + release.version + '».',
+                                'Haste2 Battery')
             except Exception as error:
                 logger.warning('%s: update check failed: %s', time.strftime('%Y-%m-%d %H:%M:%S'), error)
             redraw()
