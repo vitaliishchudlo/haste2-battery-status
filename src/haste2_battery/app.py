@@ -124,7 +124,7 @@ def run():
         while not stopped.is_set():
             update_wake.clear()
             try:
-                release = updater.check(feed, backend.RELEASE_PREFIX, VERSION)
+                release = updater.check(feed, backend.RELEASE_SUFFIX, VERSION)
                 update_state.set_available(release)
                 if release and update_settings.notified != release.version:
                     update_settings.set_notified(release.version)

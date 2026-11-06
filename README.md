@@ -53,7 +53,7 @@ If the icon is hidden, drag it out of the tray overflow.
 ## Development
 
 Build locally with `installers/windows/build.cmd` → `dist/Haste2Battery-Setup.exe` (Windows) or `installers/macos/build.sh` → `dist/Haste2Battery-macos-arm64.tar.gz` (macOS).
-Each platform has its own version and release: pushing `win-v1.5.0` builds the Windows release, `mac-v1.5.0` the macOS one (the tag must match `WINDOWS_VERSION` / `MACOS_VERSION` in `src/haste2_battery/__init__.py`). The apps only offer updates from their own tag prefix. The macOS job also smoke-tests `install.sh`. See [CHANGELOG.md](CHANGELOG.md) and [AGENTS.md](AGENTS.md).
+Each platform has its own version and release: pushing `v1.5.0-win` builds the Windows release, `v1.5.0-mac` the macOS one (the tag must match `WINDOWS_VERSION` / `MACOS_VERSION` in `src/haste2_battery/__init__.py`). The apps only offer updates from their own tag suffix. The macOS job also smoke-tests `install.sh`. See [CHANGELOG.md](CHANGELOG.md) and [AGENTS.md](AGENTS.md).
 
 Code lives in `src/haste2_battery`; OS-specific parts are in `platforms/<os>`.
 

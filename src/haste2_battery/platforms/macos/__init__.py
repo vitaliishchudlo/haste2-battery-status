@@ -158,7 +158,7 @@ def handle_cli(argv):
     return False
 
 
-RELEASE_PREFIX = 'mac-v'
+RELEASE_SUFFIX = '-mac'
 INSTALL_SCRIPT = ('https://raw.githubusercontent.com/vitaliishchudlo/haste2-battery-status/'
                   'production/installers/macos/install.sh')
 

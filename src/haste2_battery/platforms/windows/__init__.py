@@ -57,7 +57,7 @@ def handle_cli(argv):
     return installer.handle_cli(argv)
 
 
-RELEASE_PREFIX = 'win-v'
+RELEASE_SUFFIX = '-win'
 UPDATE_ASSET = 'Haste2Battery-Setup.exe'
 
 

@@ -1,7 +1,7 @@
 name: Release (Windows)
 on:
   push:
-    tags: ['win-v*']
+    tags: ['v*-win']
 permissions:
   contents: write
 jobs:
@@ -16,7 +16,7 @@ jobs:
         shell: pwsh
         run: |
           $v = python -c "import sys; sys.path.insert(0,'src'); import haste2_battery; print(haste2_battery.__version__)"
-          if ("win-v$v" -ne "${{ github.ref_name }}") { throw "Tag ${{ github.ref_name }} != package version $v" }
+          if ("v$v-win" -ne "${{ github.ref_name }}") { throw "Tag ${{ github.ref_name }} != package version $v" }
       - name: Stamp file version into the exe metadata
         shell: python
         run: |
@@ -41,10 +41,15 @@ jobs:
         run: |
           $h = (Get-FileHash dist/Haste2Battery-Setup.exe -Algorithm SHA256).Hash.ToLower()
           Set-Content dist/Haste2Battery-Setup.exe.sha256 -Value "$h  Haste2Battery-Setup.exe" -Encoding ascii
+      - name: Release title and notes from CHANGELOG
+        id: notes
+        run: python .github/release_notes.py "$(python -c "import sys; sys.path.insert(0,'src'); import haste2_battery; print(haste2_battery.__version__)")" Windows
+        shell: bash
       - uses: softprops/action-gh-release@v2
         with:
+          name: ${{ steps.notes.outputs.name }}
+          body_path: release-notes.md
           files: |
             dist/Haste2Battery-Setup.exe
             dist/Haste2Battery-Setup.exe.sha256
-          generate_release_notes: true
           make_latest: true   # "latest" = newest Windows release, so the README download link stays valid

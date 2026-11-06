@@ -1,8 +1,8 @@
 # macOS installer
 
-- `install.sh` - one-line curl installer (also update/uninstall). Always fetched from the `production` branch; it picks the newest `mac-v*` release itself.
+- `install.sh` - one-line curl installer (also update/uninstall). Always fetched from the `production` branch; it picks the newest `v*-mac` release itself.
 - `build.sh` - builds `Haste2Battery.app` with PyInstaller (ad-hoc signed), `.tar.gz` and `.dmg`. Apple Silicon only.
-- CI: `.github/workflows/release-macos.yml` builds, smoke-tests `install.sh` on a macOS runner, and on a `mac-v*` tag attaches the files to the release.
+- CI: `.github/workflows/release-macos.yml` builds, smoke-tests `install.sh` on a macOS runner, and on a `v*-mac` tag attaches the files to the release.
   Pushing a branch named `macos-*` runs build + smoke test without releasing.
 
 Backend code: `src/haste2_battery/platforms/macos/`.

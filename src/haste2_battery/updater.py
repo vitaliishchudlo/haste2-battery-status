@@ -1,7 +1,7 @@
 """Update discovery and download helpers. Platform independent, stdlib only.
 
-Releases are tagged per platform (`win-vX.Y.Z`, `mac-vX.Y.Z`); each app only looks at
-tags with its own prefix, so a macOS-only release never notifies Windows users.
+Releases are tagged per platform (`vX.Y.Z-win`, `vX.Y.Z-mac`); each app only looks at
+tags with its own suffix, so a macOS-only release never notifies Windows users.
 """
 import hashlib
 import json
@@ -34,21 +34,22 @@ def parse_version(text):
     return tuple(int(part) for part in text.split('.'))
 
 
-def newest_release(releases, prefix):
-    """Highest-versioned published release whose tag starts with `prefix`."""
+def newest_release(releases, suffix):
+    """Highest-versioned published release whose tag is `v<version><suffix>`."""
     best = None
     for item in releases:
         tag = item.get('tag_name') or ''
-        if not tag.startswith(prefix) or item.get('draft') or item.get('prerelease'):
+        if not (tag.startswith('v') and tag.endswith(suffix))                 or item.get('draft') or item.get('prerelease'):
             continue
-        version = parse_version(tag[len(prefix):])
+        number = tag[1:-len(suffix)]
+        version = parse_version(number)
         if version is None:
             continue
         assets = {asset['name']: asset['browser_download_url']
                   for asset in item.get('assets', [])
                   if str(asset.get('browser_download_url', '')).startswith(DOWNLOAD_PREFIX)}
         if best is None or version > best[0]:
-            best = (version, Release(tag[len(prefix):], tag, assets))
+            best = (version, Release(number, tag, assets))
     return best[1] if best else None
 
 
@@ -74,9 +75,9 @@ class ReleaseFeed:
         return self.cached
 
 
-def check(feed, prefix, current):
+def check(feed, suffix, current):
     """The newer release for this platform, or None if we are up to date."""
-    release = newest_release(feed.fetch(), prefix)
+    release = newest_release(feed.fetch(), suffix)
     if release is None:
         return None
     have, found = parse_version(current), parse_version(release.version)

@@ -4,6 +4,10 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: [SemVer](ht
 
 Windows and macOS are versioned and released separately (tags `win-vX.Y.Z` / `mac-vX.Y.Z`). Entries are marked **Windows**, **macOS** or **Both**; 1.1.0 and older were released together under `v*` tags.
 
+## [1.2.2] - 2026-11-07
+
+- **Both:** release tags are now `vX.Y.Z-win` / `vX.Y.Z-mac`, with titles like "Haste2 Battery 1.2.2 (Windows)" and per-platform notes from this changelog. Versions 1.2.0/1.2.1 (tags `win-v*` / `mac-v*`) must be reinstalled once by hand: they do not recognise the new tags.
+
 ## [1.2.1] - 2026-11-07
 
 - **Both:** the refresh menu item is renamed to «Оновити % заряду» (it reads the mouse battery, it is not an app update).
