@@ -9,7 +9,10 @@ import shutil
 import base64
 import subprocess
 from pathlib import Path
-import startup_config
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'src'))
+
+from haste2_battery.platforms.windows import autostart as startup_config  # noqa: E402
 
 
 def powershell(script):

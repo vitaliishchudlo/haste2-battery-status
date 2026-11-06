@@ -1,0 +1,25 @@
+[project]
+name = "haste2-battery"
+dynamic = ["version"]
+description = "Tray battery monitor for the HyperX Pulsefire Haste 2 Wireless mouse"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "hidapi==0.15.0",
+    "pystray==0.19.5",
+    "Pillow>=10.1,<14",
+]
+
+[project.optional-dependencies]
+dev = ["pytest"]
+build = ["pyinstaller>=6.11,<7"]
+
+[tool.setuptools.dynamic]
+version = { attr = "haste2_battery.__version__" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

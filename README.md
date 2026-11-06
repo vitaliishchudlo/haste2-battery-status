@@ -37,7 +37,7 @@ Python is required to build the application during installation. After installat
 
 1. Download the project ZIP and extract it.
 2. Open the extracted application folder.
-3. Double-click `INSTALL.cmd`.
+3. Open `installers/windows` and double-click `INSTALL.cmd`.
 4. Wait for the build and installation to finish.
 
 The application starts automatically and creates a desktop shortcut.
@@ -60,13 +60,13 @@ If Windows hides the icon, move it from the tray overflow into the visible tray 
 
 1. Exit the running application from its tray menu.
 2. Extract the new version into a separate folder.
-3. Run `INSTALL.cmd`.
+3. Run `installers/windows/INSTALL.cmd`.
 
 Your saved refresh interval is preserved during normal updates.
 
 ## Uninstalling
 
-Exit the application and run `CLEAN_OLD.cmd` from the extracted project folder.
+Exit the application and run `installers/windows/CLEAN_OLD.cmd` from the extracted project folder.
 
 This removes the utility’s installed files, shortcut, and startup entries. It does not uninstall Python or HyperX NGENUITY.
 
@@ -86,15 +86,49 @@ Main components:
 
 ## Platform support
 
-The current version targets **Windows 11**.
+| Platform | Status |
+|----------|--------|
+| Windows 11 | Supported |
+| macOS | Planned (`src/haste2_battery/platforms/macos`, `installers/macos`) |
+| Linux | TODO, future |
 
-macOS and Linux versions are not implemented yet.
+## Project structure
+
+```
+src/haste2_battery/
+  protocol.py        HID battery query (cross-platform)
+  state.py           settings, reading cache, refresh throttling (cross-platform)
+  render.py          tray icon drawing (cross-platform)
+  app.py             tray app and menu
+  platforms/         one backend per OS: data dir, single instance, autostart
+    windows/  macos/  linux/
+installers/          build/install scripts per OS
+assets/              icon
+tests/               pytest suite
+```
+
+Adding a new OS means implementing the same small set of functions as `platforms/windows`
+and adding an installer under `installers/<os>`.
+
+## Development
+
+```
+pip install -e .[dev]
+python -m pytest
+```
+
+Run from source on Windows: `python installers/windows/launcher.pyw`.
+
+## Releases
+
+Versions follow SemVer and are listed in [CHANGELOG.md](CHANGELOG.md). Pushing a tag such as `v1.5.0`
+(it must match `__version__` in `src/haste2_battery/__init__.py`) triggers a GitHub Actions
+workflow that runs the tests, builds the Windows package and attaches it to a GitHub Release.
 
 ## Development status
 
-Version **1.4.0**.
-
-Automated checks with simulated inputs cover battery response parsing, polling behavior, cached readings, and startup configuration. Hardware behavior and installation should also be verified on the target computer.
+Version **1.4.0**. Unit tests cover battery response parsing, cached readings, polling/refresh logic
+and settings. Hardware behavior and installation should be verified on the target computer.
 
 ## Acknowledgments
 

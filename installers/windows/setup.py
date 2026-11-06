@@ -6,8 +6,14 @@ import subprocess
 import tempfile
 from pathlib import Path
 
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / 'src'))
+
+from haste2_battery import __version__ as VERSION  # noqa: E402
+from haste2_battery.platforms.windows import autostart as startup_config  # noqa: E402
+
 NAME = 'Haste2Battery'
-VERSION = '1.4.0'
+HERE = Path(__file__).resolve().parent
 
 
 def ps_quote(text):
@@ -46,8 +52,7 @@ def make_shortcut(exe, icon, target):
 def main():
     if sys.platform != 'win32':
         raise RuntimeError('This installer requires Windows 11.')
-    import startup_config
-    source = Path(__file__).resolve().parent
+    source = ROOT
     target = Path(os.environ['LOCALAPPDATA']) / NAME
     if source.is_relative_to(target.resolve()):
         raise RuntimeError('Extract the ZIP outside the installed Haste2Battery folder first.')
@@ -69,12 +74,12 @@ def main():
         subprocess.run([
             str(python), '-m', 'PyInstaller', '--noconfirm', '--clean',
             '--onedir', '--windowed', '--name', NAME,
-            '--icon', str(source/'haste2.ico'),
-            '--version-file', str(source/'version_info.txt'),
+            '--icon', str(source/'assets'/'haste2.ico'),
+            '--version-file', str(HERE/'version_info.txt'),
             '--hidden-import', 'pystray._win32',
-            '--paths', str(source),
+            '--paths', str(source/'src'),
             '--distpath', str(temp/'dist'), '--workpath', str(temp/'build'),
-            '--specpath', str(temp), str(source/'haste2_tray.pyw')
+            '--specpath', str(temp), str(HERE/'launcher.pyw')
         ], cwd=temp, check=True)
         built = temp/'dist'/NAME
         if not (built/(NAME+'.exe')).is_file():
@@ -85,7 +90,7 @@ def main():
         if destination.exists():
             shutil.rmtree(destination)
         shutil.copytree(built, destination)
-        shutil.copy2(source/'haste2.ico', target/'haste2.ico')
+        shutil.copy2(source/'assets'/'haste2.ico', target/'haste2.ico')
         exe = destination/(NAME+'.exe')
         make_shortcut(exe, target/'haste2.ico', destination)
         startup_config.remove_registration(target)
