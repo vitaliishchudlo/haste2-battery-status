@@ -2,7 +2,7 @@
 
 Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: [SemVer](https://semver.org/).
 
-## [Unreleased]
+## [1.1.0] - 2026-11-06
 
 - macOS (Apple Silicon) support: `.app` + `install.sh` one-line installer, LaunchAgent autostart, `.dmg` fallback.
 
