@@ -33,7 +33,7 @@ def run():
     logger.addHandler(handler)
     refresh = threading.Event()
     stopped = threading.Event()
-    status = {'text': 'Очікування відповіді мишки…'}
+    status = {'text': 'Очікування відповіді від мишки…'}
     gate = RefreshGate()
     cache = ReadingCache()
     settings = IntervalSettings(folder / 'settings.json')
