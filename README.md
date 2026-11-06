@@ -14,12 +14,14 @@ A lightweight tray battery monitor for the **HyperX Pulsefire Haste 2 Wireless**
 | Platform | Status |
 |----------|--------|
 | Windows 11 | Supported |
-| macOS (Apple Silicon) | Supported (see below) |
+| macOS 11+ (Apple Silicon) | Supported; Intel Macs are not built |
 | Linux | Future |
 
 Hardware: Haste 2 Wireless **USB receiver** (VID `03F0`, PID `0F98`). Other mice and receivers are not supported.
 
 ## Installation
+
+### Windows
 
 1. Download `Haste2Battery-Setup.exe` from the [latest release](../../releases/latest).
 2. Double-click it and confirm.
@@ -39,17 +41,18 @@ curl -fsSL https://github.com/vitaliishchudlo/haste2-battery-status/releases/lat
 It installs to `~/Applications`, enables start at login and launches the app. No Apple account, no Gatekeeper warning (curl downloads are not quarantined).
 On first run macOS asks for **Input Monitoring** permission: allow it, otherwise the mouse cannot be read.
 Update: run the same command again. Uninstall: same command with `| bash -s -- --uninstall`.
+The app lives in the menu bar (no Dock icon). Logs: `~/Library/Application Support/Haste2Battery/`.
 Fallback: download the `.dmg` from the release; the first launch needs Settings → Privacy & Security → *Open Anyway*.
 
 ## Usage
 
-Right-click (macOS: click) the tray icon to refresh, change the interval, toggle startup, or exit.
+Right-click the tray icon (macOS: click the menu bar icon) to refresh, change the interval, toggle startup, or exit.
 If the icon is hidden, drag it out of the tray overflow.
 
 ## Development
 
 Build locally with `installers/windows/build.cmd` → `dist/Haste2Battery-Setup.exe` (Windows) or `installers/macos/build.sh` → `dist/Haste2Battery-macos-arm64.tar.gz` (macOS).
-Pushing a tag like `v1.5.0` builds and publishes a release via GitHub Actions. See [CHANGELOG.md](CHANGELOG.md).
+Pushing a tag like `v1.5.0` (must match `__version__`) builds and publishes both Windows and macOS assets via GitHub Actions; the macOS job also smoke-tests `install.sh`. See [CHANGELOG.md](CHANGELOG.md).
 
 Code lives in `src/haste2_battery`; OS-specific parts are in `platforms/<os>`.
 

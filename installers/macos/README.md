@@ -9,9 +9,9 @@ Backend code: `src/haste2_battery/platforms/macos/`.
 
 ## Testing a build before release (on a Mac)
 
-The README's `curl` command only works after a release exists. Before that:
+Normal users use the `curl` command from the main README. To test a build that is not released yet:
 
-**Option A - CI artifact (no tools needed).** On GitHub: Actions -> latest green run of the `macos-support` branch -> Artifacts -> `macos-build` (needs GitHub login). Unzip it, then in Terminal:
+**Option A - CI artifact (no tools needed).** On GitHub: Actions -> a green `Release (macOS)` run (branches named `macos-*` and tags build it) -> Artifacts -> `macos-build` (needs GitHub login). Unzip it, then in Terminal:
 
 ```
 cd ~/Downloads/macos-build   # the folder with the unzipped files
@@ -23,7 +23,7 @@ HASTE2_ARCHIVE_URL="file://$PWD/Haste2Battery-macos-arm64.tar.gz" bash path/to/i
 **Option B - build locally.** Needs Python 3.10+ (`xcode-select --install` or python.org):
 
 ```
-git clone -b macos-support https://github.com/vitaliishchudlo/haste2-battery-status.git
+git clone https://github.com/vitaliishchudlo/haste2-battery-status.git
 cd haste2-battery-status
 bash installers/macos/build.sh
 HASTE2_ARCHIVE_URL="file://$PWD/dist/Haste2Battery-macos-arm64.tar.gz" bash installers/macos/install.sh
