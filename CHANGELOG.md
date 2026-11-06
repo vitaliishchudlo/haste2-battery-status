@@ -4,6 +4,10 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: [SemVer](ht
 
 Windows and macOS are versioned and released separately (tags `win-vX.Y.Z` / `mac-vX.Y.Z`). Entries are marked **Windows**, **macOS** or **Both**; 1.1.0 and older were released together under `v*` tags.
 
+## [1.2.4] - 2026-11-07
+
+- **Both:** fix the update check failing with `CERTIFICATE_VERIFY_FAILED` in the packaged app: the CA bundle (`certifi`) is now shipped and used. Versions 1.2.2 and 1.2.3 cannot update themselves; reinstall 1.2.4 by hand once.
+
 ## [1.2.3] - 2026-11-07
 
 - **Both:** icon colour thresholds: green 60-100%, yellow 40-59%, orange 20-39%, red below 20%.

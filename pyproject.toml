@@ -8,6 +8,7 @@ dependencies = [
     "hidapi==0.15.0",
     "pystray==0.19.5",
     "Pillow>=10.1,<14",
+    "certifi",
 ]
 
 [project.optional-dependencies]

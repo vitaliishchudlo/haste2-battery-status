@@ -8,7 +8,7 @@ PY="${PYTHON:-python3}"
 
 "$PY" -m venv build/venv
 build/venv/bin/python -m pip install --only-binary=:all: -q \
-  hidapi==0.15.0 pystray==0.19.5 "Pillow>=10.1,<14" "pyinstaller>=6.11,<7"
+  hidapi==0.15.0 pystray==0.19.5 "Pillow>=10.1,<14" certifi "pyinstaller>=6.11,<7"
 
 # .icns from the Windows icon
 build/venv/bin/python - <<'PY'

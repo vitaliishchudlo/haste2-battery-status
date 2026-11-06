@@ -6,6 +6,7 @@ tags with its own suffix, so a macOS-only release never notifies Windows users.
 import hashlib
 import json
 import re
+import ssl
 import threading
 import urllib.error
 import urllib.request
@@ -15,6 +16,17 @@ API = f'https://api.github.com/repos/{REPO}/releases?per_page=30'
 DOWNLOAD_PREFIX = f'https://github.com/{REPO}/releases/download/'
 USER_AGENT = 'Haste2Battery-updater'
 TIMEOUT = 20
+
+
+def _context():
+    """System certificates plus the bundled certifi set: frozen apps often lack usable roots."""
+    context = ssl.create_default_context()
+    try:
+        import certifi
+        context.load_verify_locations(certifi.where())
+    except (ImportError, OSError):
+        pass
+    return context
 
 
 class Release:
@@ -66,7 +78,7 @@ class ReleaseFeed:
         if self.etag:
             request.add_header('If-None-Match', self.etag)
         try:
-            with urllib.request.urlopen(request, timeout=TIMEOUT) as response:
+            with urllib.request.urlopen(request, timeout=TIMEOUT, context=_context()) as response:
                 self.cached = json.loads(response.read().decode('utf-8'))
                 self.etag = response.headers.get('ETag')
         except urllib.error.HTTPError as error:
@@ -88,7 +100,7 @@ def _open(url):
     if not url.startswith(DOWNLOAD_PREFIX):
         raise ValueError('Unexpected download URL')
     request = urllib.request.Request(url, headers={'User-Agent': USER_AGENT})
-    return urllib.request.urlopen(request, timeout=TIMEOUT)
+    return urllib.request.urlopen(request, timeout=TIMEOUT, context=_context())
 
 
 def download(url, destination):

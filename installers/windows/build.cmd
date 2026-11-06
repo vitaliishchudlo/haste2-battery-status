@@ -6,7 +6,7 @@ set "ROOT=%CD%"
 set "PY=py"
 where py >nul 2>&1 || set "PY=python"
 %PY% -m venv "%ROOT%\build\venv" || goto :fail
-"%ROOT%\build\venv\Scripts\python.exe" -m pip install --only-binary=:all: hidapi==0.15.0 pystray==0.19.5 "Pillow>=10.1,<14" "pyinstaller>=6.11,<7" || goto :fail
+"%ROOT%\build\venv\Scripts\python.exe" -m pip install --only-binary=:all: hidapi==0.15.0 pystray==0.19.5 "Pillow>=10.1,<14" certifi "pyinstaller>=6.11,<7" || goto :fail
 rem PyInstaller resolves relative paths against --specpath, so every path below is absolute.
 "%ROOT%\build\venv\Scripts\python.exe" -m PyInstaller --noconfirm --clean --onefile --windowed --name Haste2Battery-Setup ^
   --icon "%ROOT%\assets\haste2.ico" ^
