@@ -33,7 +33,7 @@ def battery_color(value):
     return '#ef4444'
 
 
-def make_image(value, stale=False):
+def make_image(value, stale=False, update=False):
     from PIL import Image, ImageDraw
     image = Image.new('RGBA', (64, 64), (0, 0, 0, 0))
     draw = ImageDraw.Draw(image)
@@ -47,4 +47,6 @@ def make_image(value, stale=False):
               label, font=font, fill='#101827')
     if stale:
         draw.ellipse((49, 1, 63, 15), fill='#64748b', outline='#ffffff', width=2)
+    if update:   # blue dot, top-left (the stale marker is top-right)
+        draw.ellipse((1, 1, 15, 15), fill='#3b82f6', outline='#ffffff', width=2)
     return image

@@ -135,11 +135,20 @@ def _replace_with_retry(src, dst):
             time.sleep(0.5)
 
 
-def install():
+def _log_update_error(target, exc):
+    try:
+        with open(target / 'update-error.txt', 'a', encoding='utf-8') as handle:
+            handle.write(f'{time.strftime("%Y-%m-%d %H:%M:%S")}: {exc!r}\n')
+    except OSError:
+        pass
+
+
+def install(silent=False):
+    """Copy this exe into place. `silent` (auto-update): no dialogs, errors go to a log file."""
     source = Path(sys.executable).resolve()
     target = data_dir()
-    if not ask('Встановити Haste2 Battery для поточного користувача?\n\n'
-               'Буде створено ярлик на робочому столі та ввімкнено запуск з Windows.'):
+    if not silent and not ask('Встановити Haste2 Battery для поточного користувача?\n\n'
+                              'Буде створено ярлик на робочому столі та ввімкнено запуск з Windows.'):
         return
     try:
         target.mkdir(parents=True, exist_ok=True)
@@ -157,7 +166,12 @@ def install():
         env = dict(os.environ, PYINSTALLER_RESET_ENVIRONMENT='1')
         subprocess.Popen([str(dest)], cwd=str(target), env=env, creationflags=DETACHED | NO_WINDOW)
     except Exception as exc:
-        error(f'Не вдалося встановити:\n\n{exc}')
+        if silent:
+            _log_update_error(target, exc)
+        else:
+            error(f'Не вдалося встановити:\n\n{exc}')
+        return
+    if silent:
         return
     info('Haste2 Battery встановлено і запущено.\n\n'
          "Іконка з'явиться в треї (можливо, у прихованих значках).\n"
@@ -193,6 +207,9 @@ def handle_cli(argv):
         return True
     installed_here = (os.path.normcase(str(Path(sys.executable).resolve().parent))
                       == os.path.normcase(str(data_dir().resolve())))
+    if '--update' in argv:                  # launched by the running app after a download
+        install(silent=True)
+        return True
     if '--install' in argv or (getattr(sys, 'frozen', False) and not installed_here):
         install()
         return True

@@ -6,7 +6,7 @@ from pathlib import Path
 
 
 class IntervalSettings:
-    OPTIONS = (1, 3, 5)
+    OPTIONS = (1, 3, 5, 30, 60, 180, 360)   # minutes
 
     def __init__(self, path):
         self.path = Path(path)
@@ -33,6 +33,35 @@ class IntervalSettings:
             temporary.write_text(json.dumps({'interval_minutes': value}), encoding='utf-8')
             temporary.replace(self.path)
             self._minutes = value
+
+
+class UpdateSettings:
+    """Remembers which new version was already announced (the check period is fixed)."""
+    CHECK_SECONDS = 6 * 3600     # plus one check at start
+
+    def __init__(self, path):
+        self.path = Path(path)
+        self.lock = threading.Lock()
+        self._notified = ''
+        try:
+            value = json.loads(self.path.read_text(encoding='utf-8')).get('notified')
+            if isinstance(value, str):
+                self._notified = value
+        except (OSError, ValueError, AttributeError):
+            pass
+
+    @property
+    def notified(self):
+        with self.lock:
+            return self._notified
+
+    def set_notified(self, version):
+        with self.lock:
+            self.path.parent.mkdir(parents=True, exist_ok=True)
+            temporary = self.path.with_suffix('.tmp')
+            temporary.write_text(json.dumps({'notified': version}), encoding='utf-8')
+            temporary.replace(self.path)
+            self._notified = version
 
 
 class ReadingCache:

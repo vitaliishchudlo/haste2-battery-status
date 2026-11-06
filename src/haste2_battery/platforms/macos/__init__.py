@@ -156,3 +156,22 @@ def handle_cli(argv):
         install()
         return True
     return False
+
+
+RELEASE_PREFIX = 'mac-v'
+INSTALL_SCRIPT = ('https://raw.githubusercontent.com/vitaliishchudlo/haste2-battery-status/'
+                  'production/installers/macos/install.sh')
+
+
+def apply_update(release):
+    """Run the same one-liner as a manual install. It stops this app, replaces the bundle
+    and relaunches, so on success we are killed while waiting. Returning means it failed."""
+    process = subprocess.Popen(
+        ['/bin/bash', '-c', f'curl -fsSL "{INSTALL_SCRIPT}" | bash'],
+        start_new_session=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    code = process.wait()
+    raise RuntimeError(f'install.sh exited with code {code}')
+
+
+def cleanup_update():
+    pass

@@ -1,7 +1,7 @@
 name: Release (macOS)
 on:
   push:
-    tags: ['v*']
+    tags: ['mac-v*']
     branches: ['macos-**']
   workflow_dispatch:
 permissions:
@@ -15,10 +15,10 @@ jobs:
         with:
           python-version: '3.12'
       - name: Check tag matches package version
-        if: startsWith(github.ref, 'refs/tags/v')
+        if: startsWith(github.ref, 'refs/tags/mac-v')
         run: |
           v=$(python -c "import sys; sys.path.insert(0,'src'); import haste2_battery; print(haste2_battery.__version__)")
-          [ "v$v" = "${{ github.ref_name }}" ] || { echo "Tag ${{ github.ref_name }} != package version $v"; exit 1; }
+          [ "mac-v$v" = "${{ github.ref_name }}" ] || { echo "Tag ${{ github.ref_name }} != package version $v"; exit 1; }
       - name: Build .app, tar.gz and dmg
         run: bash installers/macos/build.sh
       - name: Smoke test install.sh (install, autostart entry, uninstall)
@@ -43,10 +43,10 @@ jobs:
           name: macos-build
           path: dist/Haste2Battery-macos-arm64.*
       - uses: softprops/action-gh-release@v2
-        if: startsWith(github.ref, 'refs/tags/v')
+        if: startsWith(github.ref, 'refs/tags/mac-v')
         with:
           files: |
             dist/Haste2Battery-macos-arm64.tar.gz
             dist/Haste2Battery-macos-arm64.dmg
-            installers/macos/install.sh
           generate_release_notes: true
+          make_latest: false   # install.sh and the updater look the macOS release up themselves

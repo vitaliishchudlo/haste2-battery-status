@@ -1,14 +1,14 @@
 #!/bin/bash
 # Haste2 Battery installer for macOS (Apple Silicon).
-#   Install / update:  curl -fsSL https://github.com/vitaliishchudlo/haste2-battery-status/releases/latest/download/install.sh | bash
-#   Uninstall:         curl -fsSL .../install.sh | bash -s -- --uninstall
+#   Install / update:  curl -fsSL https://raw.githubusercontent.com/vitaliishchudlo/haste2-battery-status/production/installers/macos/install.sh | bash
+#   Uninstall:         curl -fsSL <same URL> | bash -s -- --uninstall
 # Downloading with curl leaves no quarantine flag, so Gatekeeper does not block the app.
 set -euo pipefail
 
 REPO="vitaliishchudlo/haste2-battery-status"
 NAME="Haste2Battery"
 ARCHIVE="$NAME-macos-arm64.tar.gz"
-URL="${HASTE2_ARCHIVE_URL:-https://github.com/$REPO/releases/latest/download/$ARCHIVE}"
+API="https://api.github.com/repos/$REPO/releases?per_page=30"
 APP_DIR="$HOME/Applications"
 APP="$APP_DIR/$NAME.app"
 PLIST="$HOME/Library/LaunchAgents/com.haste2battery.app.plist"
@@ -33,6 +33,15 @@ fi
 
 TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT
+
+# Windows and macOS are released separately, so "latest" is not reliable: take the newest
+# release that actually carries the macOS archive (the API lists newest first).
+URL="${HASTE2_ARCHIVE_URL:-}"
+if [ -z "$URL" ]; then
+  JSON="$(curl -fsSL "$API")" || die "не вдалося отримати список релізів."
+  URL="$(printf '%s' "$JSON" | grep -o "https://[^\"]*/$ARCHIVE" | head -1 || true)"
+  [ -n "$URL" ] || die "не знайдено macOS-релізу."
+fi
 
 say "Завантаження Haste2 Battery…"
 curl -fsSL "$URL" -o "$TMP/$ARCHIVE" || die "не вдалося завантажити $URL"
