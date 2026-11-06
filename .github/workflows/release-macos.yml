@@ -34,6 +34,7 @@ jobs:
           plutil -lint "$PLIST"
           grep -q "$APP/Contents/MacOS/Haste2Battery" "$PLIST"
           "$APP/Contents/MacOS/Haste2Battery" --version
+          "$APP/Contents/MacOS/Haste2Battery" --check-update   # packaged app can reach GitHub (certificates)
           codesign --verify --deep --strict "$APP"
           bash installers/macos/install.sh --uninstall
           test ! -e "$APP"

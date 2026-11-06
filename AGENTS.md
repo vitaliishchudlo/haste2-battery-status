@@ -38,5 +38,6 @@ Rules:
 
 - Code: `src/haste2_battery`; OS-specific parts in `platforms/<os>`, each exposing the same interface (including `RELEASE_SUFFIX` and `apply_update`).
 - Auto-update: `updater.py` (GitHub releases API, ETag, SHA256). Windows downloads `Haste2Battery-Setup.exe` + `.sha256` and runs it with `--update`; macOS re-runs `installers/macos/install.sh` from the `production` branch.
+- `Haste2Battery --check-update` does one real update check (exit 0/1); both release workflows run it on the packaged app before publishing. CI builds on Python 3.12, whose default SSL context lacks roots that 3.13 accepts, so never test networking only from a dev Python: test the packaged build.
 - `install.sh` must stay compatible with macOS bash 3.2.
 - Windows release marks itself `latest`; macOS release does not (`make_latest: false`). Nothing may rely on `releases/latest` for macOS.

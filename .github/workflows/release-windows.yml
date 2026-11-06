@@ -36,6 +36,11 @@ jobs:
           python -m PyInstaller --noconfirm --clean --onefile --windowed --name Haste2Battery-Setup
           --icon assets/haste2.ico --version-file installers/windows/version_info.txt
           --hidden-import pystray._win32 --paths src installers/windows/launcher.pyw
+      - name: Smoke test the packaged exe (GitHub reachable, certificates valid)
+        shell: pwsh
+        run: |
+          $p = Start-Process dist/Haste2Battery-Setup.exe -ArgumentList '--check-update' -Wait -PassThru
+          if ($p.ExitCode -ne 0) { throw "--check-update failed with exit code $($p.ExitCode)" }
       - name: Checksum for the auto-updater
         shell: pwsh
         run: |

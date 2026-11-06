@@ -219,7 +219,20 @@ def run():
         lock.close()
 
 
+def check_update_cli():
+    """`--check-update`: one real update check, exit code 0 = ok, 1 = failed (used by CI)."""
+    try:
+        release = updater.check(updater.ReleaseFeed(), backend.RELEASE_SUFFIX, VERSION)
+    except Exception as error:
+        print('update check failed:', error, file=sys.stderr)
+        return 1
+    print('update available: ' + release.version if release else 'up to date: ' + VERSION)
+    return 0
+
+
 def main():
+    if '--check-update' in sys.argv:       # before backend.handle_cli: must never install
+        sys.exit(check_update_cli())
     if backend.handle_cli(sys.argv[1:]):
         return
     try:
