@@ -24,9 +24,9 @@ jobs:
       - name: Smoke test install.sh (install, autostart, launch, uninstall)
         run: |
           set -euo pipefail
-          trap 'echo "::error::smoke test failed at line $LINENO: $BASH_COMMAND | HOME=$HOME | apps: $(ls -la "$HOME/Applications" 2>&1 | tr "[:cntrl:]" "|") | agents: $(ls "$HOME/Library/LaunchAgents" 2>&1 | tr "[:cntrl:]" " ") | data: $(ls "$HOME/Library/Application Support/Haste2Battery" 2>&1 | tr "[:cntrl:]" " ")"' ERR
+          trap 'echo "::error::smoke test failed at line $LINENO: $BASH_COMMAND | install.log: $(tail -c 1500 /tmp/inst.log 2>&1 | tr "[:cntrl:]" "|") | HOME=$HOME | apps: $(ls -la "$HOME/Applications" 2>&1 | tr "[:cntrl:]" "|") | agents: $(ls "$HOME/Library/LaunchAgents" 2>&1 | tr "[:cntrl:]" " ") | data: $(ls "$HOME/Library/Application Support/Haste2Battery" 2>&1 | tr "[:cntrl:]" " ")"' ERR
           export HASTE2_ARCHIVE_URL="file://$PWD/dist/Haste2Battery-macos-arm64.tar.gz"
-          bash installers/macos/install.sh
+          bash -x installers/macos/install.sh > /tmp/inst.log 2>&1; echo "install exit=$?"
           APP="$HOME/Applications/Haste2Battery.app"
           PLIST="$HOME/Library/LaunchAgents/com.haste2battery.app.plist"
           test -d "$APP"
