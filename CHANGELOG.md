@@ -4,6 +4,10 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: [SemVer](ht
 
 Windows and macOS are versioned and released separately (tags `win-vX.Y.Z` / `mac-vX.Y.Z`). Entries are marked **Windows**, **macOS** or **Both**; 1.1.0 and older were released together under `v*` tags.
 
+## [1.2.1] - 2026-11-07
+
+- **Both:** the refresh menu item is renamed to «Оновити % заряду» (it reads the mouse battery, it is not an app update).
+
 ## [1.2.0] - 2026-11-07
 
 - **Both:** automatic update check at start and then every 6 h (plus a menu item to check now). A blue dot on the icon and a notification announce a new version; the menu item *Оновити до версії X* installs it after the user clicks.

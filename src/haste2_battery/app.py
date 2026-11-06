@@ -147,7 +147,7 @@ def run():
         pystray.MenuItem(lambda item: status['text'], None, enabled=False),
         pystray.MenuItem(update_label, apply_update, enabled=update_enabled),
         pystray.MenuItem('Перевірити оновлення', check_now),
-        pystray.MenuItem('Оновити зараз', request_refresh, default=True),
+        pystray.MenuItem('Оновити % заряду', request_refresh, default=True),
         pystray.MenuItem('Частота оновлення', pystray.Menu(
             *[pystray.MenuItem(interval_label(n), choose_interval(n),
                               checked=interval_checked(n), radio=True)
