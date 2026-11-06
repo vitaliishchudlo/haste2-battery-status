@@ -147,7 +147,7 @@ def install():
         dest, staging = target / EXE, target / (EXE + '.new')
         shutil.copy2(source, staging)
         _replace_with_retry(staging, dest)
-        for old in target.glob('app-*'):                  # layout of versions up to 1.4.0
+        for old in target.glob('app-*'):                  # older folder layout
             shutil.rmtree(old, ignore_errors=True)
         (target / 'haste2_tray.pyw').unlink(missing_ok=True)
         make_shortcut(dest)

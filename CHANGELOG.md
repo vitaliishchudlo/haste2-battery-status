@@ -2,22 +2,11 @@
 
 Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: [SemVer](https://semver.org/).
 
-## [Unreleased]
+## [1.0.0]
 
-### Changed
-- Windows installation is now a single self-installing `Haste2Battery-Setup.exe`
-  (built by CI, attached to GitHub Releases). Python is no longer required on the user's PC.
-- Uninstall via Windows Settings -> Apps (or `Haste2Battery.exe --uninstall`).
-- Repository restructured: `src/haste2_battery` package, platform backends in `platforms/`,
-  installers per OS in `installers/`.
+First public release.
 
-### Added
-- macOS and Linux backend placeholders (not implemented).
-- Release workflow that builds the Windows installer on version tags.
-
-### Removed
-- `INSTALL.cmd`, `CLEAN_OLD.cmd`, `setup.py`, `cleanup.py` (replaced by the self-installing exe).
-
-## [1.4.0]
-
-Last version before the restructuring (Windows 11 only).
+- Tray battery monitor for the HyperX Pulsefire Haste 2 Wireless (Windows 11).
+- Single self-installing `Haste2Battery-Setup.exe`: no Python required; uninstall via Windows Settings -> Apps.
+- Refresh interval 1 / 3 / 5 minutes, manual refresh, start with Windows.
+- Platform backends (`platforms/`) prepared for macOS and Linux (not implemented yet).
