@@ -2,6 +2,10 @@
 
 Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: [SemVer](https://semver.org/).
 
+## [Unreleased]
+
+- macOS (Apple Silicon) support: `.app` + `install.sh` one-line installer, LaunchAgent autostart, `.dmg` fallback.
+
 ## [1.0.0]
 
 First public release.

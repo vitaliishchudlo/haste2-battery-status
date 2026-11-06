@@ -39,7 +39,7 @@ def run():
         try:
             return backend.autostart_enabled(command)
         except OSError:
-            logger.exception('Could not read Windows startup state')
+            logger.exception('Could not read autostart state')
             return False
 
     def toggle_autostart(icon, item):
@@ -81,7 +81,7 @@ def run():
             *[pystray.MenuItem(f'Раз на {n} хв', choose_interval(n),
                               checked=interval_checked(n), radio=True)
               for n in IntervalSettings.OPTIONS])),
-        pystray.MenuItem('Запускати з Windows', toggle_autostart, checked=autostart_enabled),
+        pystray.MenuItem(backend.AUTOSTART_LABEL, toggle_autostart, checked=autostart_enabled),
         pystray.Menu.SEPARATOR,
         pystray.MenuItem('Вийти', quit_app))
     icon = pystray.Icon('Haste2Battery', make_image(None), 'Haste 2: очікування…', menu)

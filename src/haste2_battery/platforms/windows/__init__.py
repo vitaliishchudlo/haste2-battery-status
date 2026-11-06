@@ -4,6 +4,7 @@ import sys
 from pathlib import Path
 
 NAME = 'Haste2Battery'
+AUTOSTART_LABEL = 'Запускати з Windows'
 
 from . import autostart  # noqa: E402
 
