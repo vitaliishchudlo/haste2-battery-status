@@ -39,6 +39,7 @@ def run():
     settings = IntervalSettings(folder / 'settings.json')
     update_settings = UpdateSettings(folder / 'updates.json')
     update_state = updater.UpdateState()
+    update_wake = threading.Event()
     feed = updater.ReleaseFeed()
     view = {'value': None, 'stale': False}
     backend.cleanup_update()
@@ -116,8 +117,12 @@ def run():
                 icon.update_menu()
         threading.Thread(target=job, name='updater', daemon=True).start()
 
+    def check_now(icon, item):
+        update_wake.set()
+
     def update_worker():
         while not stopped.is_set():
+            update_wake.clear()
             try:
                 release = updater.check(feed, backend.RELEASE_PREFIX, VERSION)
                 update_state.set_available(release)
@@ -129,17 +134,19 @@ def run():
                 logger.warning('%s: update check failed: %s', time.strftime('%Y-%m-%d %H:%M:%S'), error)
             redraw()
             icon.update_menu()
-            stopped.wait(UpdateSettings.CHECK_SECONDS)
+            update_wake.wait(UpdateSettings.CHECK_SECONDS)
 
     def quit_app(icon, item):
         stopped.set()
         refresh.set()
+        update_wake.set()
         icon.stop()
 
     menu = pystray.Menu(
         pystray.MenuItem('Haste2 Battery ' + VERSION, None, enabled=False),
         pystray.MenuItem(lambda item: status['text'], None, enabled=False),
         pystray.MenuItem(update_label, apply_update, enabled=update_enabled),
+        pystray.MenuItem('Перевірити оновлення', check_now),
         pystray.MenuItem('Оновити зараз', request_refresh, default=True),
         pystray.MenuItem('Частота оновлення', pystray.Menu(
             *[pystray.MenuItem(interval_label(n), choose_interval(n),
@@ -206,6 +213,7 @@ def run():
     finally:
         stopped.set()
         refresh.set()
+        update_wake.set()
         if thread:
             thread.join(timeout=4)
         lock.close()

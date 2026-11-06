@@ -8,7 +8,7 @@ A lightweight tray battery monitor for the **HyperX Pulsefire Haste 2 Wireless**
 - Refresh the battery reading every 1, 3, 5, 30 minutes or 1, 3, 6 hours, or manually.
 - Keeps the last reading and marks it as stale when the mouse is unavailable.
 - Starts at login (can be turned off in the menu).
-- Checks for updates (at start, then every 6 h); when a new version exists the icon gets a blue dot, and the menu item *Оновити до версії X* installs it.
+- Checks for updates (at start, then every 6 h, or on demand from the menu); when a new version exists the icon gets a blue dot, and the menu item *Оновити до версії X* installs it.
 
 ## Supported
 
