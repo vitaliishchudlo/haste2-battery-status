@@ -24,9 +24,9 @@ def load_font(size):
 def battery_color(value):
     if value is None:
         return '#94a3b8'
-    if value >= 80:
+    if value >= 60:
         return '#22c55e'
-    if value >= 50:
+    if value >= 40:
         return '#facc15'
     if value >= 20:
         return '#fb923c'
