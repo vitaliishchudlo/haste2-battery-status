@@ -39,7 +39,7 @@ curl -fsSL "$URL" -o "$TMP/$ARCHIVE" || die "не вдалося заванта�
 tar -xzf "$TMP/$ARCHIVE" -C "$TMP" || die "архів пошкоджено."
 [ -d "$TMP/$NAME.app" ] || die "в архіві немає $NAME.app."
 
-say "Встановлення в $APP_DIR…"
+say "Встановлення в ${APP_DIR}…"
 stop_app
 mkdir -p "$APP_DIR"
 rm -rf "$APP"
