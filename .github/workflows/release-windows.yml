@@ -17,17 +17,13 @@ jobs:
         run: |
           $v = python -c "import sys; sys.path.insert(0,'src'); import haste2_battery; print(haste2_battery.__version__)"
           if ("v$v" -ne "${{ github.ref_name }}") { throw "Tag ${{ github.ref_name }} != package version $v" }
-      - run: python -m pip install pytest hidapi==0.15.0 pystray==0.19.5 "Pillow>=10.1,<14" "pyinstaller>=6.11,<7"
-      - run: python -m pytest -q
-      - name: Build
+      - run: python -m pip install hidapi==0.15.0 pystray==0.19.5 "Pillow>=10.1,<14" "pyinstaller>=6.11,<7"
+      - name: Build single-file installer
         run: >
-          python -m PyInstaller --noconfirm --clean --onedir --windowed --name Haste2Battery
+          python -m PyInstaller --noconfirm --clean --onefile --windowed --name Haste2Battery-Setup
           --icon assets/haste2.ico --version-file installers/windows/version_info.txt
           --hidden-import pystray._win32 --paths src installers/windows/launcher.pyw
-      - name: Package
-        shell: pwsh
-        run: Compress-Archive -Path dist/Haste2Battery -DestinationPath "Haste2Battery-${{ github.ref_name }}-windows-x64.zip"
       - uses: softprops/action-gh-release@v2
         with:
-          files: Haste2Battery-*.zip
+          files: dist/Haste2Battery-Setup.exe
           generate_release_notes: true

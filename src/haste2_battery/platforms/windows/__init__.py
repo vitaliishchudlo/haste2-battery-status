@@ -3,9 +3,9 @@ import os
 import sys
 from pathlib import Path
 
-from . import autostart
-
 NAME = 'Haste2Battery'
+
+from . import autostart  # noqa: E402
 
 
 def data_dir():
@@ -48,3 +48,9 @@ def autostart_enabled(command):
 
 def set_autostart(command, enabled):
     autostart.set_enabled(command, enabled)
+
+
+def handle_cli(argv):
+    """Handle --install / --uninstall (and first-run install of the downloaded exe)."""
+    from . import installer
+    return installer.handle_cli(argv)

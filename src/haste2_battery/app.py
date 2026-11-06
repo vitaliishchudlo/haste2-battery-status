@@ -1,5 +1,6 @@
 """Tray application: wires the worker thread, tray icon and menu together."""
 import logging
+import sys
 import threading
 import time
 from logging.handlers import RotatingFileHandler
@@ -145,6 +146,8 @@ def run():
 
 
 def main():
+    if backend.handle_cli(sys.argv[1:]):
+        return
     try:
         run()
     except Exception:

@@ -27,22 +27,21 @@ Other HyperX mice and receiver variants are not currently supported.
 ## Requirements
 
 - Windows 11.
-- Python with pip and venv available.
-- Internet connection during installation to download build dependencies.
-- The mouse’s wireless USB receiver connected to the computer.
+- The mouse's wireless USB receiver connected to the computer.
 
-Python is required to build the application during installation. After installation, the application runs as a standalone executable.
+No Python, pip or internet connection is needed to install.
 
 ## Installation
 
-1. Download the project ZIP and extract it.
-2. Open the extracted application folder.
-3. Open `installers/windows` and double-click `INSTALL.cmd`.
-4. Wait for the build and installation to finish.
+1. Download `Haste2Battery-Setup.exe` from the [latest release](../../releases/latest).
+2. Double-click it and confirm.
 
-The application starts automatically and creates a desktop shortcut.
+The app is installed for the current user (no administrator rights), a desktop shortcut is created
+and the app starts. Startup with Windows is enabled and can be disabled from the tray menu.
+Default refresh interval: **3 minutes**.
 
-The default refresh interval is **3 minutes**. Startup with Windows is enabled during installation and can be disabled from the tray menu.
+Windows SmartScreen may warn about an unknown publisher because the file is not code-signed:
+choose *More info -> Run anyway*.
 
 ## Usage
 
@@ -58,17 +57,12 @@ If Windows hides the icon, move it from the tray overflow into the visible tray 
 
 ## Updating
 
-1. Exit the running application from its tray menu.
-2. Extract the new version into a separate folder.
-3. Run `installers/windows/INSTALL.cmd`.
-
-Your saved refresh interval is preserved during normal updates.
+Run the new `Haste2Battery-Setup.exe`. It stops the old version, replaces it and keeps your settings.
 
 ## Uninstalling
 
-Exit the application and run `installers/windows/CLEAN_OLD.cmd` from the extracted project folder.
-
-This removes the utility’s installed files, shortcut, and startup entries. It does not uninstall Python or HyperX NGENUITY.
+Windows Settings -> Apps -> *Haste2 Battery* -> Uninstall. This removes the app, its settings,
+the shortcut and the startup entry. It does not touch HyperX NGENUITY.
 
 ## How it works
 
@@ -104,7 +98,6 @@ src/haste2_battery/
     windows/  macos/  linux/
 installers/          build/install scripts per OS
 assets/              icon
-tests/               pytest suite
 ```
 
 Adding a new OS means implementing the same small set of functions as `platforms/windows`
@@ -112,23 +105,19 @@ and adding an installer under `installers/<os>`.
 
 ## Development
 
-```
-pip install -e .[dev]
-python -m pytest
-```
+Run from source (Windows): `pip install hidapi pystray Pillow`, then `python installers/windows/launcher.pyw`.
 
-Run from source on Windows: `python installers/windows/launcher.pyw`.
+Build the installer locally: `installers/windows/build.cmd` -> `dist/Haste2Battery-Setup.exe`.
 
 ## Releases
 
-Versions follow SemVer and are listed in [CHANGELOG.md](CHANGELOG.md). Pushing a tag such as `v1.5.0`
-(it must match `__version__` in `src/haste2_battery/__init__.py`) triggers a GitHub Actions
-workflow that runs the tests, builds the Windows package and attaches it to a GitHub Release.
+Versions follow SemVer ([CHANGELOG.md](CHANGELOG.md)). Pushing a tag such as `v1.5.0`
+(it must match `__version__` in `src/haste2_battery/__init__.py`) makes GitHub Actions build
+`Haste2Battery-Setup.exe` and attach it to a GitHub Release.
 
 ## Development status
 
-Version **1.4.0**. Unit tests cover battery response parsing, cached readings, polling/refresh logic
-and settings. Hardware behavior and installation should be verified on the target computer.
+Version **1.4.0**. Hardware behavior and installation should be verified on the target computer.
 
 ## Acknowledgments
 

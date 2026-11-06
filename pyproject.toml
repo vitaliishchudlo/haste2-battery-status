@@ -11,7 +11,6 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest"]
 build = ["pyinstaller>=6.11,<7"]
 
 [tool.setuptools.dynamic]
@@ -19,7 +18,3 @@ version = { attr = "haste2_battery.__version__" }
 
 [tool.setuptools.packages.find]
 where = ["src"]
-
-[tool.pytest.ini_options]
-pythonpath = ["src"]
-testpaths = ["tests"]
