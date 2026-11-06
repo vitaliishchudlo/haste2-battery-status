@@ -5,6 +5,7 @@ tags with its own suffix, so a macOS-only release never notifies Windows users.
 """
 import hashlib
 import json
+import os
 import re
 import ssl
 import threading
@@ -75,6 +76,9 @@ class ReleaseFeed:
     def fetch(self):
         request = urllib.request.Request(API, headers={
             'User-Agent': USER_AGENT, 'Accept': 'application/vnd.github+json'})
+        token = os.environ.get('HASTE2_GITHUB_TOKEN')   # CI only: avoids the shared-IP rate limit
+        if token:
+            request.add_header('Authorization', 'Bearer ' + token)
         if self.etag:
             request.add_header('If-None-Match', self.etag)
         try:

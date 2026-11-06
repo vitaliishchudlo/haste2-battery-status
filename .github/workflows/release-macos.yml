@@ -22,6 +22,8 @@ jobs:
       - name: Build .app, tar.gz and dmg
         run: bash installers/macos/build.sh
       - name: Smoke test install.sh (install, autostart entry, uninstall)
+        env:
+          HASTE2_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
           trap 'echo "::error::smoke test failed at line $LINENO: $BASH_COMMAND"' ERR
@@ -34,7 +36,13 @@ jobs:
           plutil -lint "$PLIST"
           grep -q "$APP/Contents/MacOS/Haste2Battery" "$PLIST"
           "$APP/Contents/MacOS/Haste2Battery" --version
-          "$APP/Contents/MacOS/Haste2Battery" --check-update   # packaged app can reach GitHub (certificates)
+          # packaged app can reach GitHub (certificates); retried, since the network can blip
+          ok=0
+          for attempt in 1 2 3; do
+            if out=$("$APP/Contents/MacOS/Haste2Battery" --check-update 2>&1); then ok=1; echo "$out"; break; fi
+            echo "attempt $attempt failed: $out"; sleep 15
+          done
+          [ "$ok" = 1 ] || { echo "::error::--check-update failed: $out"; exit 1; }
           codesign --verify --deep --strict "$APP"
           bash installers/macos/install.sh --uninstall
           test ! -e "$APP"

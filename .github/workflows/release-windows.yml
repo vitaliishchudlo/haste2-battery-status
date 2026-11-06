@@ -38,9 +38,17 @@ jobs:
           --hidden-import pystray._win32 --paths src installers/windows/launcher.pyw
       - name: Smoke test the packaged exe (GitHub reachable, certificates valid)
         shell: pwsh
+        env:
+          HASTE2_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          $p = Start-Process dist/Haste2Battery-Setup.exe -ArgumentList '--check-update' -Wait -PassThru
-          if ($p.ExitCode -ne 0) { throw "--check-update failed with exit code $($p.ExitCode)" }
+          $code = 1
+          foreach ($attempt in 1..3) {
+            $p = Start-Process dist/Haste2Battery-Setup.exe -ArgumentList '--check-update' -Wait -PassThru
+            $code = $p.ExitCode
+            if ($code -eq 0) { break }
+            Start-Sleep 15
+          }
+          if ($code -ne 0) { throw "--check-update failed with exit code $code" }
       - name: Checksum for the auto-updater
         shell: pwsh
         run: |
