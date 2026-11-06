@@ -17,7 +17,17 @@ DATA="$HOME/Library/Application Support/$NAME"
 say() { printf '%s\n' "$*"; }
 die() { printf 'Помилка: %s\n' "$*" >&2; exit 1; }
 
-stop_app() { pkill -x "$NAME" 2>/dev/null || true; sleep 1; }
+stop_app() {
+  pkill -x "$NAME" 2>/dev/null || true
+  pkill -f "$APP/Contents/MacOS/" 2>/dev/null || true
+  local i
+  for i in 1 2 3 4 5; do
+    pgrep -x "$NAME" >/dev/null 2>&1 || return 0
+    sleep 1
+  done
+  pkill -9 -x "$NAME" 2>/dev/null || true     # still alive after 5 s: force it
+  sleep 1
+}
 
 [ "$(uname -s)" = "Darwin" ] || die "цей інсталятор лише для macOS."
 

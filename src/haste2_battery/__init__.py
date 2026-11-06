@@ -4,6 +4,6 @@ import sys
 # Each platform is versioned and released independently (tags `vX.Y.Z-win` / `vX.Y.Z-mac`).
 # See AGENTS.md for when to bump which one.
 WINDOWS_VERSION = "1.2.5"
-MACOS_VERSION = "1.2.5"
+MACOS_VERSION = "1.2.6"
 
 __version__ = {'win32': WINDOWS_VERSION, 'darwin': MACOS_VERSION}.get(sys.platform, WINDOWS_VERSION)

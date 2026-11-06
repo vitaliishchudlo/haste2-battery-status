@@ -4,6 +4,10 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: [SemVer](ht
 
 Windows and macOS are versioned and released separately (tags `win-vX.Y.Z` / `mac-vX.Y.Z`). Entries are marked **Windows**, **macOS** or **Both**; 1.1.0 and older were released together under `v*` tags.
 
+## [1.2.6] - 2026-11-07
+
+- **macOS:** fix the in-app update showing "install.sh exited with code 0" and leaving the old version running: `install.sh` now makes sure the old process is gone (force-kills after 5 s) and the app relaunches itself after a successful install.
+
 ## [1.2.5] - 2026-11-07
 
 - **Both:** minor wording fix in the startup status text (also used to test auto-update).

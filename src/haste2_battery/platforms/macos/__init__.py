@@ -164,13 +164,20 @@ INSTALL_SCRIPT = ('https://raw.githubusercontent.com/vitaliishchudlo/haste2-batt
 
 
 def apply_update(release):
-    """Run the same one-liner as a manual install. It stops this app, replaces the bundle
-    and relaunches, so on success we are killed while waiting. Returning means it failed."""
+    """Run the same one-liner as a manual install. It normally stops this app, replaces the
+    bundle and relaunches, so we are killed while waiting. If we are still alive when it
+    finished successfully, the new bundle is in place: relaunch it ourselves and return True
+    (the caller quits). A non-zero exit is a failure."""
     process = subprocess.Popen(
         ['/bin/bash', '-c', f'curl -fsSL "{INSTALL_SCRIPT}" | bash'],
         start_new_session=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     code = process.wait()
-    raise RuntimeError(f'install.sh exited with code {code}')
+    if code != 0:
+        raise RuntimeError(f'install.sh exited with code {code}')
+    subprocess.Popen(['/bin/bash', '-c', 'sleep 2; open "$1"', 'relaunch',
+                      str(APP_DIR / (NAME + '.app'))],
+                     start_new_session=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    return True
 
 
 def cleanup_update():
